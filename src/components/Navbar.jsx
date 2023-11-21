@@ -1,10 +1,12 @@
+import { NavLink } from "react-router-dom";
+
 function Navbar() {
   return (
     <div>
       <nav className='navbar navbar-expand-lg bg-primary' data-bs-theme='dark'>
         <div className='container-fluid'>
-          <a className='navbar-brand' href='#'>
-            Navbar
+          <a className='navbar-brand' to='/'>
+            React.js
           </a>
           <button
             className='navbar-toggler'
@@ -20,25 +22,28 @@ function Navbar() {
           <div className='collapse navbar-collapse' id='navbarColor01'>
             <ul className='navbar-nav me-auto'>
               <li className='nav-item'>
-                <a className='nav-link active' href='#'>
+                <NavLink activeclassname='active' className='nav-link' to='/'>
                   Home
                   <span className='visually-hidden'>(current)</span>
-                </a>
+                </NavLink>
               </li>
               <li className='nav-item'>
-                <a className='nav-link' href='#'>
-                  Features
-                </a>
-              </li>
-              <li className='nav-item'>
-                <a className='nav-link' href='#'>
-                  Pricing
-                </a>
-              </li>
-              <li className='nav-item'>
-                <a className='nav-link' href='#'>
+                <NavLink
+                  activeclassname='active'
+                  className='nav-link'
+                  to='/about'
+                >
                   About
-                </a>
+                </NavLink>
+              </li>
+              <li className='nav-item'>
+                <NavLink
+                  activeclassname='active'
+                  className='nav-link'
+                  to='/contact'
+                >
+                  Contact
+                </NavLink>
               </li>
             </ul>
           </div>

@@ -1,10 +1,14 @@
 import { useState } from "react";
 import Counter from "./Counter";
 import Product from "./Product";
+import { v4 as uuid } from "uuid";
 
 function Products() {
-  let title = "Learn how to create apps with reactjs 2022";
   let showList = true;
+
+  const [title, setTitle] = useState("");
+  const [price, setPrice] = useState(0);
+  const [message, setMessage] = useState("");
 
   let [products, setProducts] = useState([
     {
@@ -32,16 +36,71 @@ function Products() {
     });
   };
 
+  const titleInput = (e) => {
+    if (e.target.value === "") {
+      setMessage("Title is required");
+    } else if (e.target.value.trim().length <= 3) {
+      setMessage("Please tape at least 3 caracters");
+    } else {
+      setMessage("");
+      setTitle(e.target.value);
+    }
+  };
+
+  const priceInput = (e) => {
+    setPrice(e.target.value);
+  };
+
+  const submitForm = (e) => {
+    e.preventDefault();
+
+    let myProduct = {
+      id: uuid(),
+      label: title,
+      price,
+    };
+
+    if (title === "") {
+      setMessage("Title is required");
+    } else if (title) setProducts([myProduct, ...products]);
+    setTitle("");
+    setPrice(0);
+  };
+
   return (
     <>
-      <h1>{title}</h1>
       <p>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia ipsam
         sint tenetur sapiente .
       </p>
-
+      <form onSubmit={submitForm}>
+        <div className='form-group'>
+          <label htmlFor='' class='form-label'>
+            Title
+          </label>
+          <input
+            defaultValue={title}
+            onChange={titleInput}
+            className='form-control'
+            type='text'
+          />
+          {message && <div className='alert alert-danger'>{message}</div>}
+        </div>
+        <div className='form-group'>
+          <label htmlFor='' class='form-label'>
+            Price
+          </label>
+          <input
+            defaultValue={price}
+            onChange={priceInput}
+            className='form-control'
+            type='number'
+          />
+        </div>
+        <button class='btn btn-primary my-2 mb-4'>Save</button>
+      </form>
+      {title} - {price}
       <Counter />
-
       {showList && (
         <div>
           {products.map((product, index) => (
