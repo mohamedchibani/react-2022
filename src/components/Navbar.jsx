@@ -1,12 +1,16 @@
 import { NavLink } from "react-router-dom";
+import { useContext } from "react";
+import { ProductContext } from "../contexts/ProductContext";
 
 function Navbar() {
+  const { title, products } = useContext(ProductContext);
+
   return (
     <div>
       <nav className='navbar navbar-expand-lg bg-primary' data-bs-theme='dark'>
         <div className='container-fluid'>
           <a className='navbar-brand' to='/'>
-            React.js
+            {title ?? "React 2022"}
           </a>
           <button
             className='navbar-toggler'
@@ -22,15 +26,21 @@ function Navbar() {
           <div className='collapse navbar-collapse' id='navbarColor01'>
             <ul className='navbar-nav me-auto'>
               <li className='nav-item'>
-                <NavLink activeclassname='active' className='nav-link' to='/'>
-                  Home
+                <NavLink
+                  className={(navData) =>
+                    `nav-link ${navData.isActive ? "active" : ""}`
+                  }
+                  to='/'
+                >
+                  Home ({products.length})
                   <span className='visually-hidden'>(current)</span>
                 </NavLink>
               </li>
               <li className='nav-item'>
                 <NavLink
-                  activeclassname='active'
-                  className='nav-link'
+                  className={(navData) =>
+                    `nav-link ${navData.isActive ? "active" : ""}`
+                  }
                   to='/about'
                 >
                   About
@@ -38,8 +48,9 @@ function Navbar() {
               </li>
               <li className='nav-item'>
                 <NavLink
-                  activeclassname='active'
-                  className='nav-link'
+                  className={(navData) =>
+                    `nav-link ${navData.isActive ? "active" : ""}`
+                  }
                   to='/contact'
                 >
                   Contact

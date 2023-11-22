@@ -1,40 +1,18 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import Counter from "./Counter";
 import Product from "./Product";
 import { v4 as uuid } from "uuid";
 
+import { ProductContext } from "../contexts/ProductContext";
+
 function Products() {
+  const { products, addProduct } = useContext(ProductContext);
+
   let showList = true;
 
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState(0);
   const [message, setMessage] = useState("");
-
-  let [products, setProducts] = useState([
-    {
-      id: 1,
-      label: "Iphone 13",
-      price: 1250,
-    },
-    {
-      id: 2,
-      label: "Samsung",
-      price: 1150,
-    },
-    {
-      id: 3,
-      label: "Samsung",
-      price: 850,
-    },
-  ]);
-
-  const deleteProduct = (id) => {
-    const filtredProducts = products.filter((product) => product.id !== id);
-    setProducts((prev) => {
-      console.log("🚀 ~ file: Products.jsx:30 ~ setProducts ~ prev:", prev);
-      return filtredProducts;
-    });
-  };
 
   const titleInput = (e) => {
     if (e.target.value === "") {
@@ -60,9 +38,8 @@ function Products() {
       price,
     };
 
-    if (title === "") {
-      setMessage("Title is required");
-    } else if (title) setProducts([myProduct, ...products]);
+    addProduct(myProduct);
+
     setTitle("");
     setPrice(0);
   };
@@ -99,16 +76,11 @@ function Products() {
         </div>
         <button class='btn btn-primary my-2 mb-4'>Save</button>
       </form>
-      {title} - {price}
       <Counter />
       {showList && (
         <div>
           {products.map((product, index) => (
-            <Product
-              onDeleteProduct={deleteProduct}
-              key={product.id}
-              id={product.id}
-            >
+            <Product key={product.id} id={product.id}>
               <div className='card-body'>
                 <h4 className='card-title'>{product.label}</h4>
                 <p className='card-text'>
