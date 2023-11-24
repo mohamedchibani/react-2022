@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useRef } from "react";
 import Counter from "./Counter";
 import Product from "./Product";
 import { v4 as uuid } from "uuid";
@@ -6,12 +6,13 @@ import { v4 as uuid } from "uuid";
 import { ProductContext } from "../contexts/ProductContext";
 
 function Products() {
+  const title = useRef("");
+  const price = useRef(0);
+
   const { products, addProduct } = useContext(ProductContext);
 
   let showList = true;
 
-  const [title, setTitle] = useState("");
-  const [price, setPrice] = useState(0);
   const [message, setMessage] = useState("");
 
   const titleInput = (e) => {
@@ -21,12 +22,7 @@ function Products() {
       setMessage("Please tape at least 3 caracters");
     } else {
       setMessage("");
-      setTitle(e.target.value);
     }
-  };
-
-  const priceInput = (e) => {
-    setPrice(e.target.value);
   };
 
   const submitForm = (e) => {
@@ -34,14 +30,14 @@ function Products() {
 
     let myProduct = {
       id: uuid(),
-      label: title,
-      price,
+      label: title.current.value,
+      price: price.current.value,
     };
 
-    addProduct(myProduct);
+    title.current.value = "";
+    price.current.value = 0;
 
-    setTitle("");
-    setPrice(0);
+    addProduct(myProduct);
   };
 
   return (
@@ -52,24 +48,19 @@ function Products() {
       </p>
       <form onSubmit={submitForm}>
         <div className='form-group'>
-          <label htmlFor='' class='form-label'>
+          <label htmlFor='title' class='form-label'>
             Title
           </label>
-          <input
-            defaultValue={title}
-            onChange={titleInput}
-            className='form-control'
-            type='text'
-          />
+          <input id='title' ref={title} className='form-control' type='text' />
           {message && <div className='alert alert-danger'>{message}</div>}
         </div>
         <div className='form-group'>
-          <label htmlFor='' class='form-label'>
+          <label htmlFor='price' class='form-label'>
             Price
           </label>
           <input
-            defaultValue={price}
-            onChange={priceInput}
+            id='price'
+            ref={price}
             className='form-control'
             type='number'
           />
